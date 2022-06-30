@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns:db="http://www.mulesoft.org/schema/mule/db"
+	xmlns:wsc="http://www.mulesoft.org/schema/mule/wsc"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/wsc http://www.mulesoft.org/schema/mule/wsc/current/mule-wsc.xsd	
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd 
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	
+	 <http:request-config name="HTTP_Request_configuration" doc:name="HTTP Request configuration" doc:id="3f4a436c-d74b-4437-9fde-fc9e0de3e92e">
+        <http:request-connection host="indigo-services.us-e2.cloudhub.io" port="80" />
+    </http:request-config>
+	
+	
+	
+	<configuration doc:name="Configuration" doc:id="4692dda4-23dc-4fc4-a216-f33d5e9e9902" defaultErrorHandler-ref="Global_error_handler"/>
+	<error-handler name="Global_error_handler" doc:id="9b6a51e2-785a-4fbf-9725-1526f2865302" >
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="c0211f07-2473-42bc-a8af-3b8c53b2494f" type="ANY">
+			<ee:transform doc:name="Transform Message" doc:id="1eb67901-804d-447d-96fa-809ce30ea4a1" >
+				<ee:message >
+					<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+{
+	message:"unable to process your request,pls try after sometime"
+}]]></ee:set-payload>
+				</ee:message>
+			</ee:transform>
+		</on-error-propagate>
+	</error-handler>
+</mule>
